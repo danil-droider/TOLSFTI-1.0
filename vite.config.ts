@@ -5,8 +5,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [react(), VitePWA({
-    register: true,
-    includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'favicon.svg'],
+    registerType: 'autoUpdate',
+    includeAssets: ['apple-touch-icon.png', 'icon-192.png', 'icon-512.png'],
     manifest: {
       name: 'Goal Ticker',
       short_name: 'Goal Ticker',
@@ -14,8 +14,8 @@ export default defineConfig({
       background_color: '#121212',
       display: 'standalone',
       orientation: 'portrait',
-      start_url: '/',
-      scope: '/',
+      start_url: '/TOLSFTI-1.0/',
+      scope: '/TOLSFTI-1.0/',
       icons: [
         {
           src: 'icon-192.png',
@@ -30,7 +30,7 @@ export default defineConfig({
       ]
     }
   })],
-  base: './',
+  base: '/TOLSFTI-1.0/',
   build: {
     rollupOptions: {
       output: {

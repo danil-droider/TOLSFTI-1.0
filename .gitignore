@@ -18,3 +18,4 @@ workbox*.js
 # TypeScript
 *.tsbuildinfo
 *.tscov
+node_modules
