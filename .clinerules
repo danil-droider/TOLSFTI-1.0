@@ -1,0 +1,50 @@
+# Project Context: Goal Ticker (Maritime Savings & Overtime PWA)
+
+## 1. Project Overview
+"Goal Ticker" is a mobile-first Progressive Web App (PWA) designed for a seafarer to visualize real-time savings toward specific material goals during a maritime contract. The core emotional and functional goal is to convert continuous 24/7 contract earnings into live, ticking progress bars for desired items.
+
+## 2. Tech Stack & Libraries
+- **Framework:** React 18+ with TypeScript and Vite.
+- **Styling:** Tailwind CSS (configured for iOS-native Dark Mode).
+- **State Management:** Zustand with `persist` middleware (storing all state and event snapshots in `localStorage` so data survives app closures on iOS).
+- **Icons:** `lucide-react`.
+- **Celebration Effects:** `canvas-confetti` (with `@types/canvas-confetti`).
+- **PWA Support:** `vite-plugin-pwa` (configured for iOS "Add to Home Screen" standalone mode and full offline capability).
+
+## 3. UI/UX & Design Guidelines (iOS Dark Mode)
+- **Color Palette:**
+  - Primary Background: `#121212` or `#1C1C1E`.
+  - Elevated Cards & Modals: `#2C2C2E` with `rounded-2xl` corners.
+  - Primary Text: `#FFFFFF`, Secondary Muted Text: `#8E8E93`.
+  - Active / Completed Accent: Emerald Green (`#30D158`).
+  - Paused Accent: Amber (`#FF9F0A`).
+- **Typography:** System UI fonts (`-apple-system, BlinkMacSystemFont, sans-serif`).
+- **Strict Number Formatting:** ALL dynamic numbers (percentages, dollar amounts, countdown timers) MUST use `tabular-nums` (`font-variant-numeric: tabular-nums`) to prevent horizontal layout jitter during 1-second tick updates.
+- **Mobile Ergonomics:** Optimized for iPhone viewports. All interactive buttons must have a minimum touch target height of 44px.
+
+## 4. Core Business Logic & Math Model (CRITICAL)
+1. **Continuous 24/7 Rate:**
+   - User inputs their 30-day salary in USD (`monthlySalary`).
+   - Base earning rate per millisecond:
+     `baseRatePerMs = monthlySalary / (30 * 24 * 60 * 60 * 1000)`
+2. **Parallel Goal Splitting:**
+   - Multiple goals can be in the `active` state simultaneously.
+   - `baseRatePerMs` is split **equally** among all currently `active` goals (`N`).
+   - Speed per active goal = `baseRatePerMs / N`.
+   - Goals in `idle`, `paused`, or `completed` states receive `0` rate.
+3. **Timestamp-Based Persistence (No Background Timers):**
+   - iOS suspends PWA background threads. NEVER rely on `setInterval` increments for actual financial accumulation.
+   - Store `accumulatedAmount` (in USD) and `lastUpdatedTimestamp` (`Date.now()`).
+   - Whenever a state transition occurs (Start, Pause, Resume, Add Goal, Delete Goal, Salary Change), first settle/commit the earned amounts up to `Date.now()` before changing active goal counts.
+   - **Auto-Completion Cascade (Offline Catch-up):** When calculating elapsed time `deltaMs = now - lastUpdatedTimestamp`, check if any active goal would reach 100% (`targetAmount`) *before* `now`. If Goal A finishes at `t_finish < now`, cap Goal A at `targetAmount` (`status: 'completed'`), reduce active count `N - 1`, and apply the newly freed rate to the remaining active goals for the remaining time `now - t_finish`.
+4. **Goal Lifecycle States:**
+   - `idle`: Created, 0% progress, shows "Start Saving" button.
+   - `active`: Ticking live every second (2 decimal places on percentage, e.g., `42.85%`), shows bar graph, saved/remaining USD, and dynamic ETA (`Xd Yh Zm`), shows "Pause" button.
+   - `paused`: Frozen progress in amber styling, shows "Resume" button.
+   - `completed`: Reached 100%, locked at `100.00%`, triggers a subtle `canvas-confetti` burst upon transition/discovery, shows "Saved / Accumulated" badge.
+
+## 5. Coding Rules & Workflow for Cline
+- **Incremental Execution:** Implement features strictly step-by-step as requested. Do not jump ahead or scaffold unrequested features.
+- **Clean Architecture:** Separate mathematical/simulation logic (e.g., `src/utils/calculator.ts`) from UI components and Zustand store logic (`src/store/useGoalStore.ts`).
+- **Zero External Backend:** Everything must run 100% client-side with zero external API calls.
+- **Language:** All code, comments, variable names, and UI labels (unless specified otherwise) must be clean, idiomatic English.

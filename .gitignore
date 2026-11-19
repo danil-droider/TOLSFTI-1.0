@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+/dist
+
+# Environment variables
+.env*.local
+.DS_Store
+
+# Keep .clinerules
+!.clinerules
+
+# Vite PWA cache
+workbox*.js
+
+# TypeScript
+*.tsbuildinfo
+*.tscov
