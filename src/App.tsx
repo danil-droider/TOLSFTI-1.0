@@ -46,7 +46,12 @@ export const App: React.FC = () => {
     : { daily: 0, hourly: 0, perMinute: 0 }
 
   return (
-    <div className="min-h-screen">
+    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', color: '#000000' }} className="min-h-screen">
+
+      {/* DEBUG BANNER — v1.3 */}
+      <div className="fixed top-0 left-0 right-0 bg-iosAccentActive text-white text-sm py-2 px-4 font-medium z-50">
+        DEBUG WHITE THEME — v1.3
+      </div>
 
       {/* Header section */}
       <header className="border-b border-ios-text-muted/10 bg-ios-dark py-3 px-4">

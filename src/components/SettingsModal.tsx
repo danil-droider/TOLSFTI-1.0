@@ -122,6 +122,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           >
             Cancel
           </button>
+          <div className="text-ios-text-muted text-xs uppercase tracking-wider mb-3">
+            v1.3
+          </div>
         </div>
       </div>
     </div>
