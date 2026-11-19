@@ -87,7 +87,7 @@ export const App: React.FC = () => {
           )}
 
           {/* Goals cards */}
-          {!goals.length === 0 ? null : (
+          {goals.length === 0 ? null : (
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {goals.map((goal) => (
                 <GoalCard

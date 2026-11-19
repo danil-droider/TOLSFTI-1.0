@@ -108,7 +108,25 @@ export const useGoalStore = create<SalaryState & GoalState>()(
       },
     }),
     {
-      name: 'goal-ticker-settings'
+      name: 'goal-ticker-settings',
+      version: 1,
+      migrate: (persistedState: any) => {
+        // Safe migration: ensure goals array exists and has correct shape
+        const existingGoals = persistedState?.goals || []
+        // Normalize each goal to have required fields
+        const normalizedGoals = (existingGoals as Goal[]).map((g: any) => ({
+          id: g.id || crypto.randomUUID(),
+          title: g.title || 'Goal',
+          targetAmount: g.targetAmount ?? 0,
+          accumulatedAmount: g.accumulatedAmount ?? 0,
+          status: g.status || 'idle',
+          lastUpdatedTimestamp: g.lastUpdatedTimestamp ?? null,
+        }))
+        return {
+          ...persistedState,
+          goals: normalizedGoals,
+        }
+      }
     }
   )
 )

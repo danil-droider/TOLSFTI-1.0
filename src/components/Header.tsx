@@ -1,5 +1,6 @@
 ﻿import React from 'react'
 import { useGoalStore } from '../store/useGoalStore'
+import { computeHourlyRate } from '../utils/calculator'
 import { Settings } from 'lucide-react'
 
 export const Header: React.FC = () => {

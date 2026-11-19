@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { formatNumber } from '../utils/calculator'
 import { Trash, Play, Pause, CheckCircle } from 'lucide-react'
 
 import type { Goal, GoalStatus } from '../types'
@@ -58,11 +59,14 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal, onDelete }) => {
     return () => clearInterval(id)
   }, [goal.id, monthlySalary, goalStoreState, syncGoals])
 
-  // Format progress display
-  const { progress, remaining } = formatProgressDisplay(
-    localAccumulated,
-    goal.targetAmount
-  )
+// Compute progress inline
+  const progress = goal.targetAmount > 0
+    ? Math.min((localAccumulated / goal.targetAmount) * 100, 100)
+    : 0
+  const remaining = goal.targetAmount > 0
+    ? goal.targetAmount - localAccumulated
+    : 0
+
 
   return (
     <div

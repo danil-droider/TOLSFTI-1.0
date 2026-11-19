@@ -48,3 +48,8 @@
 - **Clean Architecture:** Separate mathematical/simulation logic (e.g., `src/utils/calculator.ts`) from UI components and Zustand store logic (`src/store/useGoalStore.ts`).
 - **Zero External Backend:** Everything must run 100% client-side with zero external API calls.
 - **Language:** All code, comments, variable names, and UI labels (unless specified otherwise) must be clean, idiomatic English.
+
+- **Semantic Versioning:** Track the app version starting at `1.0` for the next release commit, and increment it logically with every subsequent feature commit/deployment (`1.1`, `1.2`, or `2.0` for major updates).
+- **Single Source of Truth:** Always update the `"version"` field in `package.json` (and `manifest` / app config if applicable) before committing.
+- **Visible UI Version Tag:** Display the current app version subtly in the UI (e.g., inside the Settings modal footer or header subtitle as `v1.0`) so the user can visually verify that the installed iOS PWA has updated to the latest deployed build.
+- **Git Tagging & Commit Messages:** Include the version number in the commit message (e.g., `chore(release): bump version to v1.0 - ...`) and create an annotated Git tag (`git tag v1.0`) pushed along with `origin main`.
