@@ -3,7 +3,11 @@ import { useGoalStore } from '../store/useGoalStore'
 import { computeHourlyRate } from '../utils/calculator'
 import { Settings } from 'lucide-react'
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenModal: () => void
+}
+
+export const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
   const { goals, monthlySalary } = useGoalStore()
   const activeGoals = goals.filter((g) => g.status === 'active').length
   const hourlyRatePerGoal = activeGoals > 0
@@ -26,7 +30,7 @@ export const Header: React.FC = () => {
       </div>
 
       <button
-        onClick={() => window.open('/settings', '_blank')}
+        onClick={onOpenModal}
         aria-label="Open settings"
         className="p-2 rounded-lg hover:bg-ios-card transition-colors"
         style={{ width: 44, height: 44 }}
